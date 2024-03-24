@@ -44,9 +44,17 @@ const Navbar = () => {
 
     const [currentLink, setCurrentLink] = useState('/');
 
+    const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+    
+    const setLoggedInStatus = (value: boolean) => {
+        setIsUserLoggedIn(value);
+    }
+
     const handleLinkClick = (href: string) => {
         setCurrentLink(href);
     };
+
+    console.log(isUserLoggedIn);
 
     return (
         <Disclosure as="nav" className="navbar">
@@ -97,12 +105,12 @@ const Navbar = () => {
 
                         {/* SIGNIN DIALOG */}
 
-                        <Signdialog />
+                        <Signdialog setLoggedInStatus={setLoggedInStatus} isUserLoggedIn={isUserLoggedIn} />
 
 
                         {/* REGISTER DIALOG */}
 
-                        <Registerdialog />
+                        <Registerdialog setLoggedInStatus={setLoggedInStatus} isUserLoggedIn={isUserLoggedIn} />
 
 
                         {/* DRAWER FOR MOBILE VIEW */}

@@ -3,7 +3,10 @@ import { Fragment, useState } from 'react'
 import { LockClosedIcon } from '@heroicons/react/20/solid'
 
 
-const Signin = () => {
+const Register = (props: any) => {
+
+    const {setLoggedInStatus, isUserLoggedIn} = props;
+
     let [isOpen, setIsOpen] = useState(false)
 
     const closeModal = () => {
@@ -14,12 +17,42 @@ const Signin = () => {
         setIsOpen(true)
     }
 
+    const handleLogin = async (event: any) => {
+        event.preventDefault(); // Prevent default form submission
+
+        const emailId = event.target.email.value;
+        const password = event.target.password.value;
+
+        const response = await fetch('http://127.0.0.1:5000/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include', 
+            body: JSON.stringify({
+                emailId,
+                password,
+            }),
+        });
+
+        if (response.ok) {
+            // Handle successful login
+            console.log('Login successful');
+            setLoggedInStatus(true);
+            closeModal(); // Close the modal on successful login
+        } else {
+            setLoggedInStatus(false);
+            // Handle login error
+            console.error('Login failed');
+        }
+    }
+
     return (
         <>
-            <div className="absolute inset-y-0 right-0 flex items-center sm:static sm:inset-auto sm:pr-0">
+            <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto  sm:pr-0">
                 <div className='hidden lg:block'>
-                    <button type="button" className='text-lg text-Blueviolet font-medium' onClick={openModal}>
-                        Log In
+                    <button className="text-Blueviolet text-lg font-medium ml-9 py-5 px-16 transition duration-150 ease-in-out rounded-full bg-semiblueviolet hover:text-white hover:bg-Blueviolet" onClick={openModal}>
+                        Sign up
                     </button>
                 </div>
             </div>
@@ -60,10 +93,10 @@ const Signin = () => {
                                                     alt="Your Company"
                                                 />
                                                 <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-                                                    Sign in to your account
+                                                    Register your account
                                                 </h2>
                                             </div>
-                                            <form className="mt-8 space-y-6" action="#" method="POST">
+                                            <form className="mt-8 space-y-6" action="#" method="POST" onSubmit={handleLogin}>
                                                 <input type="hidden" name="remember" defaultValue="true" />
                                                 <div className="-space-y-px rounded-md shadow-sm">
                                                     <div>
@@ -109,22 +142,17 @@ const Signin = () => {
                                                         </label>
                                                     </div>
 
-                                                    <div className="text-sm">
-                                                        <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
-                                                            Forgot your password?
-                                                        </a>
-                                                    </div>
                                                 </div>
 
                                                 <div>
                                                     <button
                                                         type="submit"
-                                                        className="group relative flex w-full justify-center rounded-md border border-transparent bg-Blueviolet py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                                        className="group relative flex w-full justify-center rounded-md border border-transparent bg-Blueviolet py-2 px-4 text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                                     >
                                                         <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                                                             <LockClosedIcon className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" aria-hidden="true" />
                                                         </span>
-                                                        Sign in
+                                                        Register Now
                                                     </button>
                                                 </div>
                                             </form>
@@ -135,7 +163,7 @@ const Signin = () => {
                                     <div className="mt-4 flex justify-end">
                                         <button
                                             type="button"
-                                            className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                                            className="inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-blue-900 "
                                             onClick={closeModal}
                                         >
                                             Got it, thanks!
@@ -151,4 +179,4 @@ const Signin = () => {
     )
 }
 
-export default Signin;
+export default Register;

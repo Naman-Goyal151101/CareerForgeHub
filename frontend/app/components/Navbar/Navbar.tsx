@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { Disclosure } from "@headlessui/react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -8,7 +7,7 @@ import Drawerdata from "./Drawerdata";
 import Signdialog from "./Signdialog";
 import Registerdialog from "./Registerdialog";
 import Logout from "./Logout";
-import AddSkills from "./addSkills";
+import AddSkill from "./AddSkills";
 
 interface NavigationItem {
   name: string;
@@ -17,11 +16,10 @@ interface NavigationItem {
 }
 
 const navigation: NavigationItem[] = [
-  { name: "Home", href: "#/", current: true },
-  { name: "Courses", href: "#courses", current: false },
-  { name: "Mentor", href: "#mentor", current: false },
-  { name: "Group", href: "/", current: false },
-  { name: "Testimonial", href: "#testimonial", current: false },
+  { name: 'Home', href: '#/', current: true },
+  { name: 'Recommendation', href: '#testimonial', current: false },
+  { name: 'Courses', href: '#courses', current: false },
+  { name: 'Team', href: '#mentor', current: false },
 ];
 
 function classNames(...classes: string[]) {
@@ -47,31 +45,42 @@ const CustomLink = ({
 };
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = React.useState(false);
-
+  const [isOpen, setIsOpen] = useState(false);
   const [currentLink, setCurrentLink] = useState("/");
-
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
-
-  const setLoggedInStatus = (value: boolean) => {
-    setIsUserLoggedIn(value);
-  };
-
-  const handleLinkClick = (href: string) => {
-    setCurrentLink(href);
-  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      // The user is logged in. Proceed accordingly.
       setIsUserLoggedIn(true);
-    } else {
-      // The user is not logged in.
-      setIsUserLoggedIn(false);
     }
   }, []);
 
+  const handleAddSkill = async (skills: any, education: any) => {
+    try {
+      const response = await fetch("http://127.0.0.1:5000/recommend_jobs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_skills: skills,
+          user_qualifications: education,
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Skills failed");
+      }
+  
+      const data = await response.json();
+      localStorage.setItem('dataFromAPI', JSON.stringify(data));
+    } catch (error: any) {
+      console.error("Error:", error.message);
+    }
+  };
+  
+  
 
   return (
     <Disclosure as="nav" className="navbar">
@@ -79,22 +88,18 @@ const Navbar = () => {
         <div className="mx-auto max-w-7xl px-6 py-4 lg:px-8">
           <div className="relative flex h-12 md:h-20 items-center justify-between">
             <div className="flex flex-1 items-center sm:items-stretch sm:justify-start">
-              {/* LOGO */}
-
               <div className="flex flex-shrink-0 items-center">
                 <img
                   className="block h-12 w-40 lg:hidden"
-                  src={"/assets/logo/logo.svg"}
+                  src={"/assets/logo/CFH_logo.png"}
                   alt="dsign-logo"
                 />
                 <img
                   className="hidden h-full w-full lg:block"
-                  src={"/assets/logo/logo.svg"}
+                  src={"/assets/logo/CFH_logo.png"}
                   alt="dsign-logo"
                 />
               </div>
-
-              {/* LINKS */}
 
               <div className="hidden lg:block m-auto">
                 <div className="flex space-x-4">
@@ -102,7 +107,8 @@ const Navbar = () => {
                     <CustomLink
                       key={item.name}
                       href={item.href}
-                      onClick={() => handleLinkClick(item.href)}
+                      onClick={() => handleAddSkill("", "")}
+
                     >
                       <span
                         className={classNames(
@@ -120,32 +126,25 @@ const Navbar = () => {
                 </div>
               </div>
             </div>
+
             {!isUserLoggedIn ? (
               <>
-                {/* SIGNIN DIALOG */}
-
                 <Signdialog
-                  setLoggedInStatus={setLoggedInStatus}
+                  setLoggedInStatus={setIsUserLoggedIn}
                   isUserLoggedIn={isUserLoggedIn}
                 />
-
-                {/* REGISTER DIALOG */}
-
                 <Registerdialog
-                  setLoggedInStatus={setLoggedInStatus}
+                  setLoggedInStatus={setIsUserLoggedIn}
                   isUserLoggedIn={isUserLoggedIn}
                 />
               </>
             ) : (
               <>
                 <Logout />
-                <AddSkills />
+                <AddSkill handleSkills={handleAddSkill} />
+
               </>
             )}
-
-            {/* DRAWER FOR MOBILE VIEW */}
-
-            {/* DRAWER ICON */}
 
             <div className="block lg:hidden">
               <Bars3Icon
@@ -154,8 +153,6 @@ const Navbar = () => {
                 onClick={() => setIsOpen(true)}
               />
             </div>
-
-            {/* DRAWER LINKS DATA */}
 
             <Drawer isOpen={isOpen} setIsOpen={setIsOpen}>
               <Drawerdata />

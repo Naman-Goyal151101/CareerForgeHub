@@ -1,129 +1,92 @@
-"use client"
+'use client';
+
+import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
-import React, { Component } from "react";
-import { StarIcon } from '@heroicons/react/24/solid';
 import Image from "next/image";
 
-// CAROUSEL DATA
+const MultipleItems = () => {
+    const [items, setItems] = useState([]);
 
-interface DataType {
-    profession: string;
-    comment: string;
-    imgSrc: string;
-    name: string;
-}
+    const [job, setJob] = useState([]);
+    const [role, setRole] = useState([]);
 
-const postData: DataType[] = [
-    {
-        name: "Robert Fox",
-        profession: 'CEO, Parkview Int.Ltd',
-        comment: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
-        imgSrc: '/assets/testimonial/user.svg',
-    },
-    {
-        name: "Leslie Alexander",
-        profession: 'CEO, Parkview Int.Ltd',
-        comment: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
-        imgSrc: '/assets/mentor/user2.png',
-    },
-    {
-        name: "Cody Fisher",
-        profession: 'CEO, Parkview Int.Ltd',
-        comment: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
-        imgSrc: '/assets/mentor/user3.png',
-    },
-    {
-        name: "Robert Fox",
-        profession: 'CEO, Parkview Int.Ltd',
-        comment: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
-        imgSrc: '/assets/mentor/user1.png',
-    },
-    {
-        name: "Leslie Alexander",
-        profession: 'CEO, Parkview Int.Ltd',
-        comment: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
-        imgSrc: '/assets/mentor/user2.png',
-    },
-    {
-        name: "Cody Fisher",
-        profession: 'CEO, Parkview Int.Ltd',
-        comment: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
-        imgSrc: '/assets/mentor/user3.png',
-    },
-]
+    let localData = localStorage.getItem("dataFromAPI") || "";
+    
+    let data: any = JSON.parse(localData);
 
-// CAROUSEL SETTINGS
+    useEffect(() => {
+        if (Object.keys(data)) {
+            setJob(data.job_recommended)
+            setRole(data.role_recommended)
+        }
+    }, [data])
 
-
-export default class MultipleItems extends Component {
-
-    render() {
-        const settings = {
-            dots: true,
-            dotsClass: "slick-dots",
-            infinite: true,
-            slidesToShow: 3,
-            // centerMode: true,
-            slidesToScroll: 2,
-            arrows: false,
-            autoplay: false,
-            speed: 500,
-            autoplaySpeed: 2000,
-            cssEase: "linear",
-            responsive: [
-                {
-                    breakpoint: 1200,
-                    settings: {
-                        slidesToShow: 3,
-                        slidesToScroll: 1,
-                        infinite: true,
-                        dots: false
-                    }
-                },
-                {
-                    breakpoint: 800,
-                    settings: {
-                        slidesToShow: 2,
-                        slidesToScroll: 1,
-                        infinite: true,
-                        dots: false
-                    }
-                },
-                {
-                    breakpoint: 600,
-                    settings: {
-                        slidesToShow: 1,
-                        slidesToScroll: 1,
-                        infinite: true,
-                        dots: false
-                    }
+    const settings = {
+        dots: true,
+        dotsClass: "slick-dots",
+        infinite: true,
+        slidesToShow: 3,
+        slidesToScroll: 2,
+        arrows: false,
+        autoplay: false,
+        speed: 500,
+        autoplaySpeed: 2000,
+        cssEase: "linear",
+        responsive: [
+            {
+                breakpoint: 1200,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                    infinite: true,
+                    dots: false
                 }
-            ]
-        };
+            },
+            {
+                breakpoint: 800,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                    infinite: true,
+                    dots: false
+                }
+            },
+            // {
+            //     breakpoint: 600,
+            //     settings: {
+            //         slidesToShow: 1,
+            //         slidesToScroll: 1,
+            //         infinite: true,
+            //         dots: false
+            //     }
+            // }
+        ]
+    };
 
-        return (
-            <div className="pt-40 pb-10 sm:pb-32 lg:py-32" id="testimonial">
-                <div className='mx-auto max-w-7xl sm:py-4 lg:px-8'>
+    return (
+
+        <div id="testimonial">
+            <div className='mx-auto max-w-7xl sm:py-4 lg:px-8'>
+                <div className="mx-auto max-w-7xl sm:py-8 px-4 lg:px-8">
+                    <h2 className="text-midnightblue text-4xl lg:text-5xl font-semibold mb-5 sm:mb-0 mt-3">Role Recommendations</h2>
+                    <h2 className='text-charcoal text-4xl font-normal text-center mt-8'>Role recommended based on your Education and Skills <br /> <span className="underline font-bold mt-18">{role[0]}</span></h2>
+
                     <Slider {...settings}>
-                        {postData.map((items, i) => (
+                        {job.map((item, i) => (
                             <div key={i}>
                                 <div className={`bg-white m-4 p-5 my-20 relative ${i % 2 ? 'middleDiv' : 'testimonial-shadow'}`}>
-                                    <div className="absolute top-[-45px]">
-                                        <Image src={items.imgSrc} alt={items.imgSrc} width={100} height={100} className="inline-block" />
-                                    </div>
-                                    <h4 className='text-base font-normal text-darkgray my-4'>{items.comment}</h4>
+                                    <h1 className="p-5">Designation: {item["Job Title"]}</h1>
+                                    <h1>Work Type: {item["Work Type"]}</h1>
+                                    <h1>Skills: {item["skills"]}</h1>
+                                    <h1>Work Type: {item["Qualifications"]}</h1>
+
                                     <hr style={{ color: "#D7D5D5" }} />
                                     <div className="flex justify-between">
                                         <div>
-                                            <h3 className='text-lg font-medium text-darkbrown pt-4 pb-2'>{items.name}</h3>
-                                            <h3 className='text-sm font-normal text-lightgray pb-2'>{items.profession}</h3>
-                                        </div>
-                                        <div className="flex">
-                                            <StarIcon width={20} className="text-gold" />
-                                            <StarIcon width={20} className="text-gold" />
-                                            <StarIcon width={20} className="text-gold" />
-                                            <StarIcon width={20} className="text-gold" />
-                                            <StarIcon width={20} className="text-lightgray" />
+                                            <div>
+                                                <h3 className='text-lg font-medium text-darkbrown pt-4 pb-2'>{item.Company}</h3>
+                                                <h3 className='text-sm font-normal text-lightgray pb-2'>{item.location}, {item.Country}</h3>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -132,7 +95,8 @@ export default class MultipleItems extends Component {
                     </Slider>
                 </div>
             </div>
-
-        );
-    }
+        </div>
+    );
 }
+
+export default MultipleItems;

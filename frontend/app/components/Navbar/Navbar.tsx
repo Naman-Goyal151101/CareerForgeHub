@@ -17,7 +17,7 @@ interface NavigationItem {
 
 const navigation: NavigationItem[] = [
   { name: 'Home', href: '#/', current: true },
-  { name: 'Recommendation', href: '#testimonial', current: false },
+  // { name: 'Recommendation', href: '#testimonial', current: false },
   { name: 'Courses', href: '#courses', current: false },
   { name: 'Team', href: '#mentor', current: false },
 ];
@@ -44,10 +44,13 @@ const CustomLink = ({
   );
 };
 
+// { name: 'Recommendation', href: '#testimonial', current: false },
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentLink, setCurrentLink] = useState("/");
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+  const [itemsOfNav, setItemsOfNav] = useState(navigation)
+  const [apiCalled, setApiCalled] = useState(false)
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -55,6 +58,11 @@ const Navbar = () => {
       setIsUserLoggedIn(true);
     }
   }, []);
+
+
+  const handleLinkClick = (href: string) => {
+    setCurrentLink(href);
+  };
 
   const handleAddSkill = async (skills: any, education: any) => {
     try {
@@ -68,19 +76,27 @@ const Navbar = () => {
           user_qualifications: education,
         }),
       });
-  
+
       if (!response.ok) {
         throw new Error("Skills failed");
       }
-  
+
       const data = await response.json();
       localStorage.setItem('dataFromAPI', JSON.stringify(data));
+      setApiCalled(true);
+      console.log(itemsOfNav.find(e => e.name === 'Recommendation'))
     } catch (error: any) {
       console.error("Error:", error.message);
     }
   };
-  
-  
+
+  // console.log(itemsOfNav)
+
+  // useEffect(() => {
+  //   if(!itemsOfNav.find(e => e.name === 'Recommendation')){
+  //     setItemsOfNav([...navigation,  { name: 'Recommendation', href: '#testimonial', current: false }])
+  //   }
+  // }, [])
 
   return (
     <Disclosure as="nav" className="navbar">
@@ -107,8 +123,7 @@ const Navbar = () => {
                     <CustomLink
                       key={item.name}
                       href={item.href}
-                      onClick={() => handleAddSkill("", "")}
-
+                      onClick={() => handleLinkClick(item.href)}
                     >
                       <span
                         className={classNames(

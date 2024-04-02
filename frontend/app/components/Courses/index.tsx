@@ -14,7 +14,6 @@ interface DataType {
     name: string;
     students: number;
     classes: number;
-    price: number;
     rating: number;
 }
 
@@ -26,7 +25,6 @@ const postData: DataType[] = [
         imgSrc: '/assets/courses/courseone.png',
         students: 150,
         classes: 12,
-        price: 20,
         rating: 4.7,
     },
     {
@@ -36,7 +34,6 @@ const postData: DataType[] = [
         imgSrc: '/assets/courses/coursetwo.png',
         students: 130,
         classes: 12,
-        price: 20,
         rating: 4.7,
     },
     {
@@ -46,7 +43,6 @@ const postData: DataType[] = [
         imgSrc: '/assets/courses/coursethree.png',
         students: 120,
         classes: 12,
-        price: 20,
         rating: 4.7,
     },
     {
@@ -56,7 +52,6 @@ const postData: DataType[] = [
         imgSrc: '/assets/courses/courseone.png',
         students: 150,
         classes: 12,
-        price: 20,
         rating: 4.7,
     },
     {
@@ -66,7 +61,6 @@ const postData: DataType[] = [
         imgSrc: '/assets/courses/coursetwo.png',
         students: 150,
         classes: 12,
-        price: 20,
         rating: 4.7,
     },
     {
@@ -76,8 +70,7 @@ const postData: DataType[] = [
         imgSrc: '/assets/courses/coursethree.png',
         students: 150,
         classes: 12,
-        price: 20,
-        rating: 4.7,
+        rating: 4.7,     
     },
 ]
 
@@ -160,9 +153,6 @@ export default class MultipleItems extends Component {
                                                     <StarIcon className="h-5 w-5 text-gold" />
                                                     <StarIcon className="h-5 w-5 text-gold" />
                                                 </div>
-                                            </div>
-                                            <div>
-                                                <h3 className="text-3xl font-medium">${items.price}</h3>
                                             </div>
                                         </div>
 

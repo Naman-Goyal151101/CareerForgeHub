@@ -14,7 +14,6 @@ interface DataType {
     name: string;
     students: number;
     classes: number;
-    price: number;
     rating: number;
 }
 
@@ -26,7 +25,6 @@ const postData: DataType[] = [
         imgSrc: '/assets/courses/courseone.png',
         students: 150,
         classes: 12,
-        price: 20,
         rating: 4.7,
     },
     {
@@ -36,7 +34,6 @@ const postData: DataType[] = [
         imgSrc: '/assets/courses/coursetwo.png',
         students: 130,
         classes: 12,
-        price: 20,
         rating: 4.7,
     },
     {
@@ -46,7 +43,6 @@ const postData: DataType[] = [
         imgSrc: '/assets/courses/coursethree.png',
         students: 120,
         classes: 12,
-        price: 20,
         rating: 4.7,
     },
     {
@@ -56,7 +52,6 @@ const postData: DataType[] = [
         imgSrc: '/assets/courses/courseone.png',
         students: 150,
         classes: 12,
-        price: 20,
         rating: 4.7,
     },
     {
@@ -66,7 +61,6 @@ const postData: DataType[] = [
         imgSrc: '/assets/courses/coursetwo.png',
         students: 150,
         classes: 12,
-        price: 20,
         rating: 4.7,
     },
     {
@@ -76,8 +70,7 @@ const postData: DataType[] = [
         imgSrc: '/assets/courses/coursethree.png',
         students: 150,
         classes: 12,
-        price: 20,
-        rating: 4.7,
+        rating: 4.7,     
     },
 ]
 
@@ -150,7 +143,7 @@ export default class MultipleItems extends Component {
                                             <h3 className='text-base font-normal pt-6 opacity-75'>{items.name}</h3>
                                         </div>
 
-                                        <div className="flex justify-between items-center py-6">
+                                        {/* <div className="flex justify-between items-center py-6">
                                             <div className="flex gap-4">
                                                 <h3 className="text-red text-22xl font-medium">{items.rating}</h3>
                                                 <div className="flex">
@@ -164,9 +157,9 @@ export default class MultipleItems extends Component {
                                             <div>
                                                 <h3 className="text-3xl font-medium">${items.price}</h3>
                                             </div>
-                                        </div>
+                                        </div> */}
 
-                                        <hr style={{ color: "#C4C4C4" }} />
+                                        {/* <hr style={{ color: "#C4C4C4" }} />
 
                                         <div className="flex justify-between pt-6">
                                             <div className="flex gap-4">
@@ -177,7 +170,7 @@ export default class MultipleItems extends Component {
                                                 <Image src={'/assets/courses/users.svg'} alt="users" width={24} height={24} className="inline-block m-auto" />
                                                 <h3 className="text-base font-medium text-black opacity-75">{items.students} students</h3>
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
                             </div>

@@ -1,25 +1,27 @@
-import './globals.css';
-import Navbar from './components/Navbar/index';
-import Footer from './components/Footer/Footer';
-
+import "./globals.css";
+import Navbar from "./components/Navbar/index";
+import Footer from "./components/Footer/Footer";
+import { RecommendationsProvider } from "./RecommendationContext"; // Adjust the import path as necessary
 
 export const metadata = {
-  title: 'CareerForge Hub',
-  description: '',
-}
+  title: "CareerForge Hub",
+  description: "",
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
       <body>
-        <Navbar />
-        {children}
-        <Footer />
+        <RecommendationsProvider>
+          <Navbar />
+          {children}
+          <Footer />
+        </RecommendationsProvider>
       </body>
     </html>
-  )
+  );
 }

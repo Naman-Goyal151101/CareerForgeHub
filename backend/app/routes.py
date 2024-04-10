@@ -7,7 +7,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-CSV_FILE_PATH = '/Users/namangoyal/Desktop/CareerForgeHub/backend/job_descriptions.csv'
+CSV_FILE_PATH = '/Users/dhruvi/Desktop/ADT/CareerForgeHub/backend/job_descriptions.csv'
 
 def generate_token(emailId):
     try:

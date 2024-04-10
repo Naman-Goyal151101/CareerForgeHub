@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { Disclosure } from "@headlessui/react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -8,6 +9,7 @@ import Signdialog from "./Signdialog";
 import Registerdialog from "./Registerdialog";
 import Logout from "./Logout";
 import AddSkill from "./AddSkills";
+import { useRecommendations } from "../../RecommendationContext"; // Adjust the path as necessary
 
 interface NavigationItem {
   name: string;
@@ -16,10 +18,10 @@ interface NavigationItem {
 }
 
 const navigation: NavigationItem[] = [
-  { name: 'Home', href: '#/', current: true },
-  // { name: 'Recommendation', href: '#testimonial', current: false },
-  { name: 'Courses', href: '#courses', current: false },
-  { name: 'Team', href: '#mentor', current: false },
+  { name: "Home", href: "#/", current: true },
+  { name: 'Recommendation', href: '#testimonial', current: false },
+  { name: "Courses", href: "#courses", current: false },
+  { name: "Team", href: "#mentor", current: false },
 ];
 
 function classNames(...classes: string[]) {
@@ -49,8 +51,9 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentLink, setCurrentLink] = useState("/");
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
-  const [itemsOfNav, setItemsOfNav] = useState(navigation)
-  const [apiCalled, setApiCalled] = useState(false)
+  // const [itemsOfNav, setItemsOfNav] = useState(navigation);
+  const [apiCalled, setApiCalled] = useState(false);
+  const { fetchDataFromAPI } = useRecommendations();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -59,44 +62,19 @@ const Navbar = () => {
     }
   }, []);
 
-
   const handleLinkClick = (href: string) => {
     setCurrentLink(href);
   };
 
   const handleAddSkill = async (skills: any, education: any) => {
-    try {
-      const response = await fetch("http://127.0.0.1:5000/recommend_jobs", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          user_skills: skills,
-          user_qualifications: education,
-        }),
+    fetchDataFromAPI(skills, education)
+      .then(() => {
+        setApiCalled(true)
+      })
+      .catch((error: any) => {
+        console.error("Error:", error.message);
       });
-
-      if (!response.ok) {
-        throw new Error("Skills failed");
-      }
-
-      const data = await response.json();
-      localStorage.setItem('dataFromAPI', JSON.stringify(data));
-      setApiCalled(true);
-      console.log(itemsOfNav.find(e => e.name === 'Recommendation'))
-    } catch (error: any) {
-      console.error("Error:", error.message);
-    }
   };
-
-  // console.log(itemsOfNav)
-
-  // useEffect(() => {
-  //   if(!itemsOfNav.find(e => e.name === 'Recommendation')){
-  //     setItemsOfNav([...navigation,  { name: 'Recommendation', href: '#testimonial', current: false }])
-  //   }
-  // }, [])
 
   return (
     <Disclosure as="nav" className="navbar">
@@ -157,7 +135,6 @@ const Navbar = () => {
               <>
                 <Logout />
                 <AddSkill handleSkills={handleAddSkill} />
-
               </>
             )}
 
